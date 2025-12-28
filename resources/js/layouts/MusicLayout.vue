@@ -36,6 +36,16 @@
                             >
                                 Clés API
                             </Link>
+                            <Link
+                                v-if="$page.props.auth.user"
+                                :href="route('clients.index')"
+                                class="px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                                :class="route().current().includes('clients') 
+                                    ? 'bg-accent text-accent-foreground' 
+                                    : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'"
+                            >
+                                Comptes Clients
+                            </Link>
                         </div>
                     </div>
                     <div class="flex items-center gap-3">

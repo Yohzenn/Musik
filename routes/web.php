@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApiKeyController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PlaylistController;
 use App\Http\Controllers\TrackController;
@@ -38,4 +39,5 @@ Route::prefix('tracks')->name('tracks.')->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('playlists', PlaylistController::class)->except('show');
     Route::resource('api-keys', ApiKeyController::class)->except('show');
+    Route::resource('clients', ClientController::class)->except('show');
 });
