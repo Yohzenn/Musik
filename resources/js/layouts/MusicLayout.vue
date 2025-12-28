@@ -1,64 +1,78 @@
 <template>
-    <div>
-        <nav class="bg-gray-800">
-            <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+    <div class="min-h-screen bg-background">
+        <nav class="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="relative flex h-16 items-center justify-between">
-                <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                    <div class="flex flex-shrink-0 items-center">
-                    <img class="h-8 w-auto" src="/images/spotify.png">
+                    <div class="flex flex-1 items-center gap-6">
+                        <Link :href="route('tracks.index')" class="flex items-center gap-2">
+                            <img class="h-8 w-auto" src="/images/spotify.png" alt="Logo">
+                        </Link>
+                        <div class="hidden sm:flex sm:gap-1">
+                            <Link
+                                :href="route('tracks.index')"
+                                class="px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                                :class="route().current().includes('tracks') 
+                                    ? 'bg-accent text-accent-foreground' 
+                                    : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'"
+                            >
+                                Musiques
+                            </Link>
+                            <Link
+                                :href="route('playlists.index')"
+                                class="px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                                :class="route().current().includes('playlists') 
+                                    ? 'bg-accent text-accent-foreground' 
+                                    : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'"
+                            >
+                                Playlists
+                            </Link>
+                            <Link
+                                v-if="$page.props.auth.user"
+                                :href="route('api-keys.index')"
+                                class="px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                                :class="route().current().includes('api-keys') 
+                                    ? 'bg-accent text-accent-foreground' 
+                                    : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'"
+                            >
+                                Clés API
+                            </Link>
+                        </div>
                     </div>
-                    <div class="hidden sm:ml-6 sm:block">
-                    <div class="flex space-x-4">
+                    <div class="flex items-center gap-3">
                         <Link
-                            :href="route('tracks.index')"
-                            :class="[route().current().includes('tracks') ? 'text-white-500' : 'text-gray-400']"
+                            v-if="$page.props.auth.user"
+                            :href="route('logout')"
+                            method="post"
+                            as="button"
+                            preserve-scroll
+                            class="text-sm text-muted-foreground hover:text-foreground transition-colors"
                         >
-                            Musiques
+                            Déconnexion
                         </Link>
-                        <Link
-                            :href="route('playlists.index')"
-                            :class="[route().current().includes('playlists') ? 'text-white-500' : 'text-gray-400']"
-                        >
-                            Playlists
-                        </Link>
+                        <template v-else>
+                            <Link
+                                :href="route('login')"
+                                class="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                            >
+                                Connexion
+                            </Link>
+                            <Link :href="route('register')">
+                                <Button variant="outline" size="sm">
+                                    Inscription
+                                </Button>
+                            </Link>
+                        </template>
                     </div>
-                    </div>
-                </div>
-                <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                    <Link
-                        v-if="$page.props.auth.user"
-                        :href="route('logout')"
-                        method="post"
-                        as="button"
-                        preserve-scroll
-                    >
-                        Log out
-                    </Link>
-                    <template v-else>
-                        <Link
-                            :href="route('login')"
-                            class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]"
-                        >
-                            Log in
-                        </Link>
-                        <Link
-                            :href="route('register')"
-                            class="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
-                        >
-                            Register
-                        </Link>
-                    </template>
-                </div>
                 </div>
             </div>
         </nav>
 
-        <div class="px-16">
-            <div class="flex justify-between items-center">
-                <h4 class="text-3xl font-bold my-6">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between mb-8">
+                <h1 class="text-3xl font-bold tracking-tight">
                     <slot name="title" />
-                </h4>
-                <div>
+                </h1>
+                <div class="flex items-center gap-2">
                     <slot name="actions" />
                 </div>
             </div>
@@ -70,11 +84,13 @@
 
 <script>
     import { Link } from '@inertiajs/vue3';
+    import { Button } from '@/components/ui/button';
 
     export default {
         name: 'MusicLayout',
         components: {
             Link,
+            Button,
         },
     }
 </script>

@@ -16,9 +16,11 @@ class PlaylistController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $playlists = Playlist::withCount('tracks')->get();
+        $playlists = Playlist::where('user_id', $request->user()->id)
+            ->withCount('tracks')
+            ->get();
 
         return Inertia::render('Playlists/Index', [
             'playlists' => $playlists,
@@ -64,8 +66,10 @@ class PlaylistController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Playlist $playlist)
+    public function edit(Request $request, Playlist $playlist)
     {
+        $this->authorize('view', $playlist);
+
         $playlist->load('tracks');
         $tracks = Track::where('is_visible', true)->get();
 
@@ -80,6 +84,8 @@ class PlaylistController extends Controller
      */
     public function update(PlaylistRequest $request, Playlist $playlist)
     {
+        $this->authorize('update', $playlist);
+
         $tracks = Track::whereIn('slug', $request->tracks)->where('is_visible', true)->get();
 
         if (count($request->tracks) !== $tracks->count()) {
@@ -99,8 +105,10 @@ class PlaylistController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Playlist $playlist)
+    public function destroy(Request $request, Playlist $playlist)
     {
+        $this->authorize('delete', $playlist);
+
         $playlist->delete();
 
         return redirect()->back();

@@ -49,11 +49,17 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
+            'admin' => 'boolean',
         ];
     }
 
     public function playlists(): HasMany
     {
         return $this->hasMany(Playlist::class);
+    }
+
+    public function apiKeys(): HasMany
+    {
+        return $this->hasMany(ApiKey::class);
     }
 }

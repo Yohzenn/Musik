@@ -35,8 +35,8 @@ class TrackController extends Controller
 
         $slug = 'trk-' . Str::uuid();
 
-        $imagePath = $request->image->storeAs('tracks/images', $slug . '.' . $request->image->extension());
-        $musicPath = $request->music->storeAs('tracks/musics', $slug . '.' . $request->music->extension());
+        $imagePath = $request->image->storeAs('tracks/images', $slug . '.' . $request->image->extension(), 'public');
+        $musicPath = $request->music->storeAs('tracks/musics', $slug . '.' . $request->music->extension(), 'public');
 
         Track::create([
             'slug' => $slug,

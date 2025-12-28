@@ -20,6 +20,13 @@ class Track extends Model
         'play_count',
     ];
 
+    protected static function booted(): void
+    {
+        static::deleting(function (Track $track) {
+            $track->playlists()->detach();
+        });
+    }
+
     public function getRouteKeyName(): string
     {
         return 'slug';

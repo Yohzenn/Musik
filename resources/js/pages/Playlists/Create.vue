@@ -5,7 +5,11 @@
         </template>
 
         <template #actions>
-            <Link :href="route('playlists.index')" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Retour</Link>
+            <Link :href="route('playlists.index')">
+                <Button variant="outline">
+                    Retour
+                </Button>
+            </Link>
         </template>
 
         <template #content>
@@ -18,6 +22,7 @@
     import MusicLayout from '@/layouts/MusicLayout.vue';
     import { Link } from '@inertiajs/vue3';
     import PlaylistForm from '@/components/Playlists/PlaylistForm.vue';
+    import { Button } from '@/components/ui/button';
 
     export default {
         name: 'Create',
@@ -25,6 +30,7 @@
             Link,
             MusicLayout,
             PlaylistForm,
+            Button,
         },
         props: {
             tracks: Array,

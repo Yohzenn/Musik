@@ -2,6 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\ApiKey;
+use App\Models\Playlist;
+use App\Policies\ApiKeyPolicy;
+use App\Policies\PlaylistPolicy;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Gate::policy(ApiKey::class, ApiKeyPolicy::class);
+        Gate::policy(Playlist::class, PlaylistPolicy::class);
     }
 }

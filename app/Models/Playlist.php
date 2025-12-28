@@ -17,6 +17,13 @@ class Playlist extends Model
         'title',
     ];
 
+    protected static function booted(): void
+    {
+        static::deleting(function (Playlist $playlist) {
+            $playlist->tracks()->detach();
+        });
+    }
+
     public function getRouteKeyName(): string
     {
         return 'slug';

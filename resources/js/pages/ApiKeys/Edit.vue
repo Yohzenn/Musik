@@ -1,11 +1,11 @@
 <template>
     <MusicLayout>
         <template #title>
-            Modifier la musique
+            Modifier la clé API
         </template>
 
         <template #actions>
-            <Link :href="route('tracks.index')">
+            <Link :href="route('api-keys.index')">
                 <Button variant="outline">
                     Retour
                 </Button>
@@ -16,35 +16,22 @@
             <div class="max-w-3xl mx-auto">
                 <Card>
                     <CardHeader>
-                        <CardTitle>Modifier {{ track.title }}</CardTitle>
+                        <CardTitle>Modifier {{ apiKey.name }}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <form @submit.prevent="submit" class="space-y-6">
                             <div class="space-y-2">
-                                <Label for="title">Titre</Label>
+                                <Label for="name">Nom de la clé</Label>
                                 <Input
-                                    id="title"
-                                    v-model="form.title"
+                                    id="name"
+                                    v-model="form.name"
                                     type="text"
-                                    placeholder="Titre de la musique"
-                                    :aria-invalid="!!form.errors.title"
+                                    placeholder="Ex: Application Mobile"
+                                    :aria-invalid="!!form.errors.name"
+                                    required
                                 />
-                                <p v-if="form.errors.title" class="text-sm text-destructive">
-                                    {{ form.errors.title }}
-                                </p>
-                            </div>
-
-                            <div class="space-y-2">
-                                <Label for="artist">Artiste</Label>
-                                <Input
-                                    id="artist"
-                                    v-model="form.artist"
-                                    type="text"
-                                    placeholder="Nom de l'artiste"
-                                    :aria-invalid="!!form.errors.artist"
-                                />
-                                <p v-if="form.errors.artist" class="text-sm text-destructive">
-                                    {{ form.errors.artist }}
+                                <p v-if="form.errors.name" class="text-sm text-destructive">
+                                    {{ form.errors.name }}
                                 </p>
                             </div>
 
@@ -52,7 +39,7 @@
                                 <Button
                                     type="button"
                                     variant="outline"
-                                    @click="$inertia.visit(route('tracks.index'))"
+                                    @click="$inertia.visit(route('api-keys.index'))"
                                     :disabled="form.processing"
                                 >
                                     Annuler
@@ -61,8 +48,8 @@
                                     type="submit"
                                     :disabled="form.processing"
                                 >
-                                    <span v-if="form.processing">Modification...</span>
-                                    <span v-else>Modifier</span>
+                                    <span v-if="form.processing">Enregistrement...</span>
+                                    <span v-else>Enregistrer</span>
                                 </Button>
                             </div>
                         </form>
@@ -75,14 +62,14 @@
 
 <script>
     import MusicLayout from '@/layouts/MusicLayout.vue';
-    import { Link } from '@inertiajs/vue3';
+    import { Link, useForm } from '@inertiajs/vue3';
     import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
     import { Input } from '@/components/ui/input';
     import { Label } from '@/components/ui/label';
     import { Button } from '@/components/ui/button';
 
     export default {
-        name: 'Edit',
+        name: 'ApiKeysEdit',
         components: {
             Link,
             MusicLayout,
@@ -95,20 +82,20 @@
             Button,
         },
         props: {
-            track: Object,
+            apiKey: Object,
         },
         data() {
             return {
-                form: this.$inertia.form({
-                    title: this.track.title,
-                    artist: this.track.artist,
+                form: useForm({
+                    name: this.apiKey.name,
                 }),
-            }
+            };
         },
         methods: {
             submit() {
-                this.form.put(route('tracks.update', { track: this.track }));
-            }
-        }
+                this.form.put(route('api-keys.update', { api_key: this.apiKey.slug }));
+            },
+        },
     }
 </script>
+
